@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <head th:replace="~{general/fragmentos :: head}"></head>
+</head>
+<body>
+    <header th:replace="~{general/fragmentos :: header}"></header>
+    <nav th:replace="~{general/fragmentos :: navbar}"></nav>
+    
+    <main class="content container">
+        <div class="row mb-4">
+            <div class="col-12">
+                <h2>
+                    <i class="bi bi-file-bar-graph-fill text-warning"></i>
+                    Reportes del Sistema
+                </h2>
+                <p class="text-muted">Estadísticas y reportes de usuarios</p>
+            </div>
+        </div>
+        
+        <!-- Tarjetas de Estadísticas -->
+        <div class="row g-4 mb-4 fade-in">
+            <div class="col-md-6">
+                <div class="card bg-success text-white">
+                    <div class="card-body text-center">
+                        <i class="bi bi-check-circle-fill" style="font-size: 3rem;"></i>
+                        <h3 class="mt-3 mb-0" th:text="${totalActivos}">0</h3>
+                        <p class="mb-0">Usuarios Activos</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <div class="card bg-danger text-white">
+                    <div class="card-body text-center">
+                        <i class="bi bi-x-circle-fill" style="font-size: 3rem;"></i>
+                        <h3 class="mt-3 mb-0" th:text="${totalInactivos}">0</h3>
+                        <p class="mb-0">Usuarios Inactivos</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Tabla de Usuarios -->
+        <div class="card fade-in">
+            <div class="card-header bg-warning text-dark">
+                <h5 class="mb-0">
+                    <i class="bi bi-people-fill"></i> Listado de Usuarios (Ordenado por Fecha)
+                </h5>
+            </div>
+            <div class="card-body">
+                <div th:if="${usuarios != null and !usuarios.empty}">
+                    <div class="table-responsive">
+                        <table class="table table-hover table-striped">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nombre Completo</th>
+                                    <th>Email</th>
+                                    <th>Rol</th>
+                                    <th>Estado</th>
+                                    <th>Fecha de Creación</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="usuario : ${usuarios}">
+                                    <td th:text="${usuario.id}">1</td>
+                                    <td th:text="${usuario.nombre + ' ' + usuario.apellido}">Nombre Apellido</td>
+                                    <td th:text="${usuario.email}">email@correo.com</td>
+                                    <td>
+                                        <span class="badge bg-info" th:text="${usuario.rol.nombre}">ROL</span>
+                                    </td>
+                                    <td>
+                                        <span th:if="${usuario.activo}" class="badge bg-success">
+                                            <i class="bi bi-check-circle-fill"></i> Activo
+                                        </span>
+                                        <span th:unless="${usuario.activo}" class="badge bg-danger">
+                                            <i class="bi bi-x-circle-fill"></i> Inactivo
+                                        </span>
+                                    </td>
+                                    <td th:text="${#temporals.format(usuario.fechaCreacion, 'dd/MM/yyyy HH:mm')}">Fecha</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <div th:if="${usuarios == null or usuarios.empty}" class="alert alert-info">
+                    <i class="bi bi-info-circle"></i> No hay usuarios para mostrar.
+                </div>
+            </div>
+        </div>
+        
+        <!-- Información Adicional -->
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="card bg-light">
+                    <div class="card-body">
+                        <h5><i class="bi bi-info-circle-fill text-primary"></i> Acerca de este Reporte</h5>
+                        <p class="mb-0">
+                            Este reporte muestra el estado actual de todos los usuarios del sistema, 
+                            ordenados por fecha de creación (más recientes primero). 
+                            Incluye estadísticas generales sobre usuarios activos e inactivos.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <footer th:replace="~{general/fragmentos :: footer}"></footer>
+    <div th:replace="~{general/fragmentos :: scripts}"></div>
+</body>
+</html>

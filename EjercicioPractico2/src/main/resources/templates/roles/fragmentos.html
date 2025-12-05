@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Fragmentos Rol</title>
+</head>
+<body>
+    <!-- Crear rol -->
+    <div th:fragment="botonesAgregar" class="mb-3">
+        <a th:href="@{/roles/nuevo}" class="btn btn-success">
+            <i class="bi bi-plus-circle"></i> Agregar Rol
+        </a>
+    </div>
+
+    <!-- TABLA DE ROLES -->
+    <div th:fragment="listadoRoles" th:if="${roles != null and !roles.empty}">
+        <div class="table-responsive">
+            <table class="table table-hover table-striped">
+                <thead class="table-dark">
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Descripción</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="rol : ${roles}">
+                        <td th:text="${rol.id}">1</td>
+                        <td>
+                            <span class="badge bg-info fs-6" th:text="${rol.nombre}">ROL</span>
+                        </td>
+                        <td th:text="${rol.descripcion}">Descripción del rol</td>
+                        <td>
+                            <a th:href="@{/roles/editar/} + ${rol.id}" 
+                               class="btn btn-warning btn-sm" title="Editar">
+                                <i class="bi bi-pencil-fill"></i> Editar
+                            </a>
+                            <a th:href="@{/roles/eliminar/} + ${rol.id}" 
+                               class="btn btn-danger btn-sm" 
+                               onclick="return confirm('¿Está seguro de eliminar este rol? Esto puede afectar a los usuarios asociados.');"
+                               title="Eliminar">
+                                <i class="bi bi-trash-fill"></i> Eliminar
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <!-- MENSAJE CUANDO NO HAY ROLES -->
+    <div th:fragment="listadoRoles" th:if="${roles == null or roles.empty}" class="alert alert-info">
+        <i class="bi bi-info-circle"></i> No hay roles registrados en el sistema.
+    </div>
+
+    <!-- FORMULARIO DE ROL -->
+    <div th:fragment="formularioRol">
+        <form th:action="@{/roles/guardar}" method="post" th:object="${rol}">
+            <input type="hidden" th:field="*{id}">
+            
+            <div class="mb-3">
+                <label for="nombre" class="form-label">
+                    <i class="bi bi-shield-fill"></i> Nombre del Rol:
+                </label>
+                <input type="text" class="form-control" id="nombre" 
+                       th:field="*{nombre}" 
+                       placeholder="Ej: ADMIN, PROFESOR, ESTUDIANTE"
+                       required>
+                <small class="form-text text-muted">
+                    El nombre debe estar en MAYÚSCULAS (Ej: ADMIN)
+                </small>
+            </div>
+            
+            <div class="mb-3">
+                <label for="descripcion" class="form-label">
+                    <i class="bi bi-file-text-fill"></i> Descripción:
+                </label>
+                <textarea class="form-control" id="descripcion" 
+                          th:field="*{descripcion}" 
+                          rows="3"
+                          placeholder="Describe las funciones de este rol"></textarea>
+            </div>
+            
+            <div class="mt-4">
+                <button type="submit" class="btn btn-success btn-custom">
+                    <i class="bi bi-save"></i> Guardar
+                </button>
+                <a th:href="@{/roles/listado}" class="btn btn-secondary btn-custom">
+                    <i class="bi bi-x-circle"></i> Cancelar
+                </a>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

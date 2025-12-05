@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <head th:replace="~{general/fragmentos :: head}"></head>
+</head>
+<body>
+    <header th:replace="~{general/fragmentos :: header}"></header>
+    <nav th:replace="~{general/fragmentos :: navbar}"></nav>
+    
+    <main class="content container">
+        <div class="row mb-4">
+            <div class="col-12">
+                <h2>
+                    <i class="bi bi-house-door-fill text-primary"></i>
+                    Bienvenido a la Plataforma Académica
+                </h2>
+                <p class="text-muted">Sistema de gestión de usuarios y roles</p>
+            </div>
+        </div>
+        
+        <!-- Cards para ADMIN -->
+        <div sec:authorize="hasRole('ADMIN')" class="row g-4 fade-in">
+            <div class="col-md-4">
+                <div class="card text-center h-100">
+                    <div class="card-body">
+                        <i class="bi bi-people-fill text-primary" style="font-size: 3rem;"></i>
+                        <h5 class="card-title mt-3">Gestión de Usuarios</h5>
+                        <p class="card-text">Administra los usuarios del sistema</p>
+                        <a th:href="@{/usuarios/listado}" class="btn btn-primary btn-custom">
+                            <i class="bi bi-arrow-right-circle"></i> Ir a Usuarios
+</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card text-center h-100">
+                    <div class="card-body">
+                        <i class="bi bi-shield-fill text-success" style="font-size: 3rem;"></i>
+                        <h5 class="card-title mt-3">Gestión de Roles</h5>
+                        <p class="card-text">Administra los roles y permisos</p>
+                        <a href="/roles/listado" class="btn btn-success btn-custom">
+                            <i class="bi bi-arrow-right-circle"></i> Ir a Roles
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card text-center h-100">
+                    <div class="card-body">
+                        <i class="bi bi-search text-info" style="font-size: 3rem;"></i>
+                        <h5 class="card-title mt-3">Consultas Avanzadas</h5>
+                        <p class="card-text">Realiza búsquedas y estadísticas</p>
+                        <a th:href="@{/consultas/index}" class="btn btn-info btn-custom text-white">
+                            <i class="bi bi-arrow-right-circle"></i> Ir a Consultas
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Cards para PROFESOR -->
+        <div sec:authorize="hasRole('PROFESOR')" class="row g-4 fade-in">
+            <div class="col-md-6">
+                <div class="card text-center h-100">
+                    <div class="card-body">
+                        <i class="bi bi-file-bar-graph-fill text-warning" style="font-size: 3rem;"></i>
+                        <h5 class="card-title mt-3">Reportes</h5>
+                        <p class="card-text">Consulta reportes y estadísticas del sistema</p>
+                        <a href="/reportes/" class="btn btn-warning btn-custom">
+                            <i class="bi bi-arrow-right-circle"></i> Ir a Reportes
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <div class="card text-center h-100">
+                    <div class="card-body">
+                        <i class="bi bi-person-badge-fill text-primary" style="font-size: 3rem;"></i>
+                        <h5 class="card-title mt-3">Mi Perfil</h5>
+                        <p class="card-text">Consulta tu información personal</p>
+                        <a href="/perfil/" class="btn btn-primary btn-custom">
+                            <i class="bi bi-arrow-right-circle"></i> Ver Perfil
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Cards para ESTUDIANTE -->
+        <div sec:authorize="hasRole('ESTUDIANTE')" class="row g-4 fade-in">
+            <div class="col-md-12">
+                <div class="card text-center">
+                    <div class="card-body py-5">
+                        <i class="bi bi-person-badge-fill text-primary" style="font-size: 4rem;"></i>
+                        <h5 class="card-title mt-3">Mi Perfil</h5>
+                        <p class="card-text">Consulta tu información personal</p>
+                        <a href="/perfil/" class="btn btn-primary btn-custom btn-lg">
+                            <i class="bi bi-arrow-right-circle"></i> Ver Mi Perfil
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Información adicional -->
+        <div class="row mt-5">
+            <div class="col-12">
+                <div class="card bg-light">
+                    <div class="card-body">
+                        <h5><i class="bi bi-info-circle-fill text-primary"></i> Información del Sistema</h5>
+                        <p class="mb-0">
+                            Esta plataforma permite la gestión integral de usuarios y roles. 
+                            Los administradores pueden gestionar usuarios, roles y realizar consultas avanzadas. 
+                            Los profesores tienen acceso a reportes del sistema. 
+                            Los estudiantes pueden consultar su información personal.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <footer th:replace="~{general/fragmentos :: footer}"></footer>
+    <div th:replace="~{general/fragmentos :: scripts}"></div>
+</body>
+</html>

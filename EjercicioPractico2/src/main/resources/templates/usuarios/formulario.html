@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title th:text="${usuario.id != null} ? 'Editar Usuario' : 'Nuevo Usuario'">Formulario Usuario</title>
+    <head th:replace="~{general/fragmentos :: head}"></head>
+</head>
+<body>
+    <header th:replace="~{general/fragmentos :: header}"></header>
+    <nav th:replace="~{general/fragmentos :: navbar}"></nav>
+
+    <main class="container mt-4">
+        <div class="row mb-4">
+            <div class="col-12">
+                <h2>
+                    <i class="bi bi-person-plus-fill text-primary"></i>
+                    <span th:text="${usuario.id != null} ? 'Editar Usuario' : 'Nuevo Usuario'"></span>
+                </h2>
+                <p class="text-muted">Complete el formulario para guardar el usuario</p>
+            </div>
+        </div>
+
+        <div class="card fade-in">
+            <div class="card-body">
+                <!-- Formulario completo -->
+                <form th:action="@{/usuarios/guardar}" th:object="${usuario}" method="post">
+                    <input type="hidden" th:field="*{id}" />
+
+                    <div class="mb-3">
+                        <label for="nombre">Nombre</label>
+                        <input type="text" th:field="*{nombre}" id="nombre" class="form-control" required />
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="apellido">Apellido</label>
+                        <input type="text" th:field="*{apellido}" id="apellido" class="form-control" required />
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="email">Email</label>
+                        <input type="email" th:field="*{email}" id="email" class="form-control" required />
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="password">Contraseña</label>
+                        <input type="password" th:field="*{password}" id="password" class="form-control" required />
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="rol">Rol</label>
+                        <select th:field="*{rol.id}" id="rol" class="form-control">
+                            <option th:each="rol : ${roles}" th:value="${rol.id}" th:text="${rol.nombre}"></option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </form>
+
+            </div>
+        </div>
+    </main>
+
+    <footer th:replace="~{general/fragmentos :: footer}"></footer>
+    <div th:replace="~{general/fragmentos :: scripts}"></div>
+</body>
+</html>

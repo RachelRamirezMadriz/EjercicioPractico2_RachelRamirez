@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Detalle del Usuario</title>
+    <head th:replace="~{general/fragmentos :: head}"></head>
+</head>
+<body>
+    <header th:replace="~{general/fragmentos :: header}"></header>
+    <nav th:replace="~{general/fragmentos :: navbar}"></nav>
+
+    <main class="container mt-4">
+        <div class="row mb-4">
+            <div class="col-12">
+                <h2>
+                    <i class="bi bi-person-circle text-primary"></i>
+                    Detalle del Usuario
+                </h2>
+                <p class="text-muted">Información completa del usuario</p>
+            </div>
+        </div>
+
+        <div class="card fade-in">
+            <div class="card-body">
+                
+                <div th:replace="~{usuarios/fragmentos :: detalleUsuario}"></div>
+            </div>
+        </div>
+
+        <div class="mt-3">
+            <a th:href="@{/usuarios/listado}" class="btn btn-secondary">Volver al listado</a>
+            <a th:href="@{/usuarios/editar/{id}(id=${usuario.id})}" class="btn btn-warning">Editar</a>
+        </div>
+    </main>
+
+    <footer th:replace="~{general/fragmentos :: footer}"></footer>
+    <div th:replace="~{general/fragmentos :: scripts}"></div>
+</body>
+</html>

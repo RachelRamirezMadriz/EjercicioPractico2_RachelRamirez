@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<!-- Fragmento: Formulario de Usuario -->
+<div th:fragment="formularioUsuario">
+    <form th:action="@{/usuarios/guardar}" th:object="${usuario}" method="post">
+        <div class="mb-3">
+            <label for="nombre" class="form-label">Nombre</label>
+            <input type="text" th:field="*{nombre}" id="nombre" class="form-control" placeholder="Ingrese el nombre" required/>
+        </div>
+
+        <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input type="email" th:field="*{email}" id="email" class="form-control" placeholder="Ingrese el email" required/>
+        </div>
+
+        <div class="mb-3">
+            <label for="rol" class="form-label">Rol</label>
+            <select name="rolId" id="rol" class="form-control" required>
+                <option th:each="rol : ${roles}" th:value="${rol.id}" th:text="${rol.nombre}"></option>
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Guardar</button>
+    </form>
+</div>
+
+
+<div th:fragment="detalleUsuario">
+    <p><strong>ID:</strong> <span th:text="${usuario.id}"></span></p>
+    <p><strong>Nombre:</strong> <span th:text="${usuario.nombre}"></span></p>
+    <p><strong>Email:</strong> <span th:text="${usuario.email}"></span></p>
+    <p><strong>Rol:</strong> <span th:text="${usuario.rol.nombre}"></span></p>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+    <head th:replace="~{general/fragmentos :: head}"></head>
+
+
+<body>
+    <header th:replace="~{general/fragmentos :: header}"></header>
+    <nav th:replace="~{general/fragmentos :: navbar}"></nav>
+    
+    <main class="content container">
+        <div class="row mb-4">
+            <div class="col-12">
+                <h2>
+                    <i class="bi bi-search text-info"></i>
+                    Consultas Avanzadas
+                </h2>
+                <p class="text-muted">Realiza búsquedas específicas y consulta estadísticas</p>
+            </div>
+        </div>
+        
+        <!-- Formularios de Consulta -->
+        <div class="row g-4 mb-4">
+            <!-- Consulta por Rol -->
+            <div class="col-md-6">
+                <div class="card fade-in">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">
+                            <i class="bi bi-shield-fill"></i> Buscar por Rol
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <form th:action="@{/consultas/por-rol}" method="get">
+                            <div class="mb-3">
+                                <label for="rolId" class="form-label">Seleccione un rol:</label>
+                                <select class="form-select" id="rolId" name="rolId" required>
+                                    <option value="">-- Seleccione --</option>
+                                    <option th:each="rol : ${roles}" 
+                                            th:value="${rol.id}" 
+                                            th:text="${rol.nombre}">
+                                    </option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">
+                                <i class="bi bi-search"></i> Buscar
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Consulta por Texto -->
+            <div class="col-md-6">
+                <div class="card fade-in">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="mb-0">
+                            <i class="bi bi-search"></i> Buscar por Texto
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <form th:action="@{/consultas/buscar-texto}" method="get">
+                            <div class="mb-3">
+                                <label for="texto" class="form-label">Nombre o Email:</label>
+                                <input type="text" class="form-control" id="texto" 
+                                       name="texto" placeholder="Escriba nombre o email" required>
+                            </div>
+                            <button type="submit" class="btn btn-success w-100">
+                                <i class="bi bi-search"></i> Buscar
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Consulta por Rango de Fechas -->
+            <div class="col-md-12">
+                <div class="card fade-in">
+                    <div class="card-header bg-warning text-dark">
+                        <h5 class="mb-0">
+                            <i class="bi bi-calendar-range-fill"></i> Buscar por Rango de Fechas
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <form th:action="@{/consultas/por-fechas}" method="get">
+                            <div class="row">
+                                <div class="col-md-5 mb-3">
+                                    <label for="inicio" class="form-label">Fecha Inicio:</label>
+                                    <input type="datetime-local" class="form-control" 
+                                           id="inicio" name="inicio" required>
+                                </div>
+                                <div class="col-md-5 mb-3">
+                                    <label for="fin" class="form-label">Fecha Fin:</label>
+                                    <input type="datetime-local" class="form-control" 
+                                           id="fin" name="fin" required>
+                                </div>
+                                <div class="col-md-2 mb-3 d-flex align-items-end">
+                                    <button type="submit" class="btn btn-warning w-100">
+                                        <i class="bi bi-search"></i> Buscar
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Estadísticas -->
+            <div class="col-md-12">
+                <div class="card fade-in">
+                    <div class="card-header bg-info text-white">
+                        <h5 class="mb-0">
+                            <i class="bi bi-graph-up-arrow"></i> Ver Estadísticas Generales
+                        </h5>
+                    </div>
+                    <div class="card-body text-center">
+                        <p>Consulta las estadísticas completas del sistema</p>
+                        <a th:href="@{/consultas/estadisticas}" class="btn btn-info btn-lg">
+                            <i class="bi bi-bar-chart-fill"></i> Ver Estadísticas
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Resultados de la Consulta -->
+        <div th:if="${titulo != null}" class="card fade-in">
+            <div class="card-header bg-dark text-white">
+                <h5 class="mb-0">
+                    <i class="bi bi-list-ul"></i> Resultados: <span th:text="${titulo}">Consulta</span>
+                </h5>
+            </div>
+            <div class="card-body">
+                <!-- Mostrar estadísticas si existen -->
+                <div th:if="${activos != null}" class="row g-3 mb-4">
+                    <div class="col-md-6">
+                        <div class="alert alert-success text-center">
+                            <h3 class="mb-0" th:text="${activos}">0</h3>
+                            <p class="mb-0">Usuarios Activos</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="alert alert-danger text-center">
+                            <h3 class="mb-0" th:text="${inactivos}">0</h3>
+                            <p class="mb-0">Usuarios Inactivos</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Tabla de Resultados -->
+                <div th:if="${usuarios != null and !usuarios.empty}">
+                    <div class="table-responsive">
+                        <table class="table table-hover table-striped">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nombre</th>
+                                    <th>Apellido</th>
+                                    <th>Email</th>
+                                    <th>Rol</th>
+                                    <th>Estado</th>
+                                    <th>Fecha Creación</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="usuario : ${usuarios}">
+                                    <td th:text="${usuario.id}">1</td>
+                                    <td th:text="${usuario.nombre}">Nombre</td>
+                                    <td th:text="${usuario.apellido}">Apellido</td>
+                                    <td th:text="${usuario.email}">email@correo.com</td>
+                                    <td>
+                                        <span class="badge bg-info" th:text="${usuario.rol.nombre}">ROL</span>
+                                    </td>
+                                    <td>
+                                        <span th:if="${usuario.activo}" class="badge bg-success">Activo</span>
+                                        <span th:unless="${usuario.activo}" class="badge bg-danger">Inactivo</span>
+                                    </td>
+                                    <td th:text="${#temporals.format(usuario.fechaCreacion, 'dd/MM/yyyy HH:mm')}">Fecha</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="alert alert-info mt-3">
+                        <i class="bi bi-info-circle"></i>
+                        Total de resultados: <strong th:text="${usuarios.size()}">0</strong>
+                    </div>
+                </div>
+                
+                <div th:if="${usuarios != null and usuarios.empty}" class="alert alert-warning">
+                    <i class="bi bi-exclamation-triangle-fill"></i>
+                    No se encontraron resultados para esta consulta.
+                </div>
+            </div>
+        </div>
+        
+        <!-- Información -->
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="card bg-light">
+                    <div class="card-body">
+                        <h5><i class="bi bi-lightbulb-fill text-warning"></i> Acerca de las Consultas</h5>
+                        <p class="mb-0">
+                            Utiliza los formularios superiores para realizar búsquedas específicas:
+                        </p>
+                        <ul class="mt-2">
+                            <li><strong>Por Rol:</strong> Filtra usuarios según su rol en el sistema</li>
+                            <li><strong>Por Texto:</strong> Busca coincidencias en nombre o email</li>
+                            <li><strong>Por Fechas:</strong> Encuentra usuarios creados en un período específico</li>
+                            <li><strong>Estadísticas:</strong> Visualiza métricas generales del sistema</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <footer th:replace="~{general/fragmentos :: footer}"></footer>
+    <div th:replace="~{general/fragmentos :: scripts}"></div>
+</body>
+</html>
